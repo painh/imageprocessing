@@ -28,6 +28,7 @@ input[type="submit"]
 </style>
 <h1>안드로이드는 크롬에서 쓰세여</h1>	
 <h1>서버에 저장된 파일은 한시간 단위로 지울 예정이니 직접 링크는 삼가해주세여</h1>	
+<h1>(트위터에 올려 쓰셈)</h1>	
 <form enctype="multipart/form-data" action="processing.php" method="POST">
 <input type="hidden" name="MAX_FILE_SIZE" value="10000000" /> 
 <label><input style="margin-bottom:50px;" checked=true type="checkbox" name="square" /> 사각형으로 크롭 </label>
