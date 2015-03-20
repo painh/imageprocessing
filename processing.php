@@ -79,10 +79,9 @@ if($_POST['square'])
 //header("Content-type: image/png");
 $time = time();
 $filename = "imgs/con_".$time.".".$ext;
-if($ext == 'jpg' || $ext == 'jpeg')
-	$ret = imagejpeg($originImg,$filename);
-if($ext == 'png')
-	$ret = imagepng($originImg,$filename);
+$withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename); 
+$filename = $withoutExt.".png";
+$ret = imagepng($originImg,$filename);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +93,7 @@ if($ext == 'png')
 
 
 <?php
-	echo "<a href ='$filename'><img src='$filename'></img></a>";
+	echo "<img src='$filename'></img>";
 ?>
 	
 </body>
