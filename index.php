@@ -32,6 +32,8 @@ input[type="submit"]
 <input type="hidden" name="MAX_FILE_SIZE" value="10000000" /> 
 <label><input style="margin-bottom:50px;" checked=true type="checkbox" name="square" /> 사각형으로 크롭 </label>
 <br/>
+<label><input style="margin-bottom:50px;" checked=true type="checkbox" name="crop_min" /> 800 크기로 리사이즈 </label>
+<br/>
 <input style="height:200px;" type="file" name="file" accept="image/*" /> 
 <br/>
 <br/>
