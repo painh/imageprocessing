@@ -26,7 +26,7 @@ $filename = "imgs/con_".$time.".".$ext;
 $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename); 
 $filename = $withoutExt.".png";
 
-circleCrop($uploadfile, $_POST['square'], $_POST['crop_min'] ? 800 : 0, $filename);
+circleCrop($uploadfile, array_key_exists('square', $_POST), array_key_exists('crop_min', $_POST) ? 800 : 0, $filename);
 
 
 include 'config.php';
