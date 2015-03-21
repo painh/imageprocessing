@@ -1,4 +1,5 @@
 <?php
+include_once 'crop_circle.php';
 
 $uploaddir = 'imgs/';
 $uploadfile = $uploaddir . time(). basename($_FILES['file']['name']);
@@ -11,7 +12,7 @@ if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
 		error_log(print_r($_FILES, true));
 }
 
-		error_log(print_r($_FILES, true));
+		//error_log(print_r($_FILES, true));
 
 
 //$uploadfile = './imgs/14268685682015-03-20 15.12.22.jpg';
@@ -20,108 +21,12 @@ if (move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile)) {
 $size = getimagesize($uploadfile); 
 $ext = strtolower( pathinfo($uploadfile, PATHINFO_EXTENSION) );
 
-if($ext == 'jpg' || $ext == 'jpeg')
-	$originImg = imagecreatefromjpeg($uploadfile); 
-if($ext == 'png')
-	$originImg = imagecreatefrompng($uploadfile); 
-
-$min = min($size[0], $size[1]);
-$max = max($size[0], $size[1]);
-$MIN_SIZE = 800;
-if($_POST['crop_min'] && $min > $MIN_SIZE)
-{
-	$max = $max * $MIN_SIZE / $min;
-	if($size[0] == $min)
-	{
-		$min = $MIN_SIZE;
-		$new_width = $size[0] * $min / $size[0];
-		$new_height = $size[1] * $max / $size[1];
-	}
-	else
-	{
-		$min = $MIN_SIZE;
-		$new_width = $size[0] * $max / $size[0];
-		$new_height = $size[1] * $min / $size[1];
-	}
-
-	$new_width = floor($new_width);
-	$new_height = floor($new_height);
-    $dest = imagecreatetruecolor($new_width, $new_height);
-    imagecopyresized(
-        $dest,
-        $originImg,
-        0,
-        0,
-        0,
-        0,
-        $new_width,
-        $new_height,
-        $size[0],
-        $size[1]
-    );
-
-	$ratio = $size[1] / $size[0];
-	echo "$ratio {$size[0]} {$size[1]} $min , $max, $new_width, $new_height \n<br/>";
-	$size[0] = $new_width;
-	$size[1] = $new_height; 
-	$originImg = $dest;
-}
-$layer = imagecreatetruecolor($size[0], $size[1]);
-$bg = imagecolorallocate($layer, 0, 0, 0);
-$col_ellipse = imagecolorallocate($layer, 255, 255, 255);
-$circleSize = $min - $min * 0.05;
-imagefilledellipse($layer, $size[0]/2, $size[1] / 2, $circleSize , $circleSize , $col_ellipse);
-
-
-if($originImg)
-{
-	for($i = 0; $i < $size[0];++$i)
-		for($j = 0; $j < $size[1];++$j)
-		{
-			$color = imagecolorat($layer, $i, $j);
-
-			if($color == 0)
-				imagesetpixel($originImg, $i, $j, $col_ellipse);
-		}
-}
-
-function mycrop($src, array $rect)
-{
-    $dest = imagecreatetruecolor($rect['width'], $rect['height']);
-    imagecopyresized(
-        $dest,
-        $src,
-        0,
-        0,
-        $rect['x'],
-        $rect['y'],
-        $rect['width'],
-        $rect['height'],
-        $rect['width'],
-        $rect['height']
-    );
-
-    return $dest;
-}
-
-//if($_POST['square'])
-//{
-//	$min_half = $min / 2;
-//
-//	$width_half = $size[0] / 2;
-//	$height_half = $size[1] / 2;
-//	$originImg = mycrop($originImg, ['x' => $width_half - $min_half,
-//										'y' => $height_half - $min_half,
-//										'width' => $min,
-//										'height' => $min]);
-//}
-
-//header("Content-type: image/png");
 $time = time();
 $filename = "imgs/con_".$time.".".$ext;
 $withoutExt = preg_replace('/\\.[^.\\s]{3,4}$/', '', $filename); 
 $filename = $withoutExt.".png";
-$ret = imagepng($originImg,$filename);
+
+circleCrop($uploadfile, $_POST['square'], $_POST['crop_min'] ? 800 : 0, $filename);
 
 
 include 'config.php';
